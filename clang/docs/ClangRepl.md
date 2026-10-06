@@ -8,8 +8,8 @@ the LLVM just-in-time (JIT) infrastructure.
 
 Clang-Repl is suitable for exploratory programming and in places where time
 to insight is important. Clang-Repl is a project inspired by the work in
-[Cling](https://github.com/root-project/cling), a LLVM-based C/C++ interpreter
-developed by the field of high energy physics and used by the scientific data
+[Cling](https://github.com/root-project/cling), an LLVM-based C/C++ interpreter
+developed by the field of high-energy physics and used by the scientific data
 analysis framework [ROOT](https://root.cern/). Clang-Repl allows to move parts
 of Cling upstream, making them useful and available to a broader audience.
 
@@ -37,7 +37,7 @@ Clang-Repl data flow can be divided into roughly 8 phases:
 
 6. The LLVM IR is the input format for LLVM’s JIT compilation infrastructure.
    The tool will instruct the JIT to run specified functions, translating them
-   into machine code targeting the underlying device architecture (eg. Intel
+   into machine code targeting the underlying device architecture (e.g. Intel
    x86 or NVPTX).
 
 7. The LLVM JIT lowers the LLVM IR to machine code.
@@ -87,7 +87,6 @@ clang-repl> auto r = f();
 
 ```text
 clang-repl> #include<iostream>
-clang-repl> using namespace std;
 clang-repl> std::cout << "Welcome to CLANG-REPL" << std::endl;
 Welcome to CLANG-REPL
 // Prints Welcome to CLANG-REPL
@@ -135,11 +134,10 @@ clang-repl>
 // Note: This '\' can be used for continuation of the statements in the next line
 ```
 
-## Lamdas:
+## Lambdas:
 
 ```text
 clang-repl> #include <iostream>
-clang-repl> using namespace std;
 clang-repl> auto welcome = []()  { std::cout << "Welcome to REPL" << std::endl;};
 clang-repl> welcome();
 Welcome to REPL
@@ -219,9 +217,9 @@ The `%quit` command terminates clang-repl.
 clang-repl> %quit
 ```
 
-Just like Clang, Clang-Repl can be integrated in existing applications as a library
+Just like Clang, Clang-Repl can be integrated into existing applications as a library
 (using the clangInterpreter library). This turns your C++ compiler into a service that
-can incrementally consume and execute code. The **Compiler as A Service** (**CaaS**)
+can incrementally consume and execute code. The **Compiler as a Service** (**CaaS**)
 concept helps support advanced use cases such as template instantiations on demand and
 automatic language interoperability. It also helps static languages such as C/C++ become
 apt for data science.
@@ -244,7 +242,7 @@ the captured data.
 In many cases, it is useful to bring back the program execution result to the
 compiled program. This result can be stored in an object of type **Value**.
 
-### How Execution Results are captured (Value Synthesis):
+### How Execution Results are captured (Value Synthesis)
 
 The synthesizer chooses which expression to synthesize, and then it replaces
 the original expression with the synthesized expression. Depending on the
@@ -328,7 +326,7 @@ these conversions on request.
 On-request conversions can help improve the user experience, by allowing
 conversion to a desired 'to' type, when the 'from' type is unknown or unclear.
 
-### Significance of this Feature
+### Significance of this feature
 
 The 'Value' object enables wrapping a memory region that comes from the
 JIT, and bringing it back to the compiled code (and vice versa).
@@ -472,7 +470,7 @@ makes it a more attractive option.
 
 ## Implementation Details
 
-### Parsing mechanism:
+### Parsing mechanism
 
 The Interpreter in Clang-Repl (`Interpreter.cpp`) includes the function
 `ParseAndExecute()` that can accept a 'Value' parameter to capture the result.
@@ -547,7 +545,7 @@ Printing the Data and Type are handled in their respective functions:
 This feature uses a new token (`annot_repl_input_end`) to consider printing the
 value of an expression if it doesn't end with a semicolon. When parsing an
 Expression Statement, if the last semicolon is missing, then the code will
-pretend that there one and set a marker there for later utilization, and
+pretend that there is one and set a marker there for later utilization, and
 continue parsing.
 
 A semicolon is normally required in C++, but this feature expands the C++
@@ -580,7 +578,6 @@ if (CurTok && !R.isInvalid())
   CurTok->setAnnotationValue(R.get());
 
 return R;
-  }
 ```
 
 ### AST Transformation
@@ -603,11 +600,11 @@ Decl(`TopLevelStmtDecl`) and has a semicolon missing, then ask the interpreter
 to synthesize another expression (an internal function call) to replace this
 original expression.
 
-### Detailed RFC and Discussion:
+### Detailed RFC and Discussion
 
 For more technical details, community discussion and links to patches related
 to these features,
-Please visit: [RFC on LLVM Discourse](https://discourse.llvm.org/t/rfc-handle-execution-results-in-clang-repl/68493).
+please visit: [RFC on LLVM Discourse](https://discourse.llvm.org/t/rfc-handle-execution-results-in-clang-repl/68493).
 
 Some logic presented in the RFC (e.g. ValueGetter()) may be outdated,
 compared to the final developed solution.
